@@ -132,7 +132,10 @@ in {
     flake-checker.enable = true;
     forbid-new-submodules.enable = true;
     hadolint.enable = true;
-    headache.enable = true;
+    headache = {
+      enable = true;
+      excludes = ["\\.md$"];
+    };
     markdownlint.enable = true;
     ripsecrets.enable = true;
     rustfmt.enable = true;
