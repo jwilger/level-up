@@ -18,12 +18,10 @@ in {
       mob
       alejandra
       openssl
+      cargo-binstall
       cargo-workspaces
       cargo-nextest
-      playwright-test
-      playwright-driver
       playwright-driver.browsers
-      tailwindcss
       dbmate
     ]
     ++ lib.optionals stdenv.isLinux [
@@ -58,7 +56,7 @@ in {
     "zsh:install_repl" = {
       exec = ''
         export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-        ${cargo}/bin/cargo install evcxr
+        ${cargo}/bin/cargo binstall -y --force evcxr@0.18.0
       '';
       status = "evcxr -V";
 
@@ -67,7 +65,7 @@ in {
     "zsh:install_bacon" = {
       exec = ''
         export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-        ${cargo}/bin/cargo install bacon
+        ${cargo}/bin/cargo binstall -y --force bacon@3.6.0
       '';
       status = "bacon --version";
       before = ["devenv:enterShell"];
@@ -75,7 +73,23 @@ in {
     "zsh:install_dioxus-cli" = {
       exec = ''
         export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-        ${cargo}/bin/cargo install dioxus-cli@0.6.1
+        ${cargo}/bin/cargo binstall -y --force dioxus-cli@0.6.1
+      '';
+      status = "dx --version";
+      before = ["devenv:enterShell"];
+    };
+    "zsh:install_cargo-workspaces" = {
+      exec = ''
+        export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+        ${cargo}/bin/cargo binstall -y --force cargo-workspaces@0.3.6
+      '';
+      status = "dx --version";
+      before = ["devenv:enterShell"];
+    };
+    "zsh:install_cargo-nextest" = {
+      exec = ''
+        export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+        ${cargo}/bin/cargo binstall -y --force cargo-nextest@0.9.82
       '';
       status = "dx --version";
       before = ["devenv:enterShell"];
