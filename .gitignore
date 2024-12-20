@@ -8,3 +8,4 @@
 .devenv
 .pre-commit-config.yaml
 .devenv.flake.nix
+.bacon-locations

@@ -80,6 +80,14 @@ in {
       status = "dx --version";
       before = ["devenv:enterShell"];
     };
+    "zsh:install_wasm-bindgen-cli" = {
+      exec = ''
+        export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+        ${cargo}/bin/cargo install wasm-bindgen-cli@0.2.99
+      '';
+      status = "wasm-bindgen --version";
+      before = ["devenv:enterShell"];
+    };
   };
 
   services =
@@ -99,10 +107,7 @@ in {
         enable = true;
         config = ''
           level-up.jwilger.slipstreamconsulting.net {
-            reverse_proxy localhost:3000
-          }
-          level-up.jwilger.slipstreamconsulting.net:3003 {
-            reverse_proxy localhost:3001
+            reverse_proxy localhost:8080
           }
         '';
       };
