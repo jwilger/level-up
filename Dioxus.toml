@@ -6,7 +6,7 @@ name = "level-up"
 [web.app]
 
 # HTML title tag content
-title = "level-up"
+title = "LevelUp"
 
 # include `assets` in web platform
 [web.resource]
