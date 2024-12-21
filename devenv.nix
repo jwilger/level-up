@@ -11,27 +11,41 @@
   fPkgs = fenix.packages.${pkgs.system}.default;
   cargo = fPkgs.cargo;
   nodejs = uPkgs.nodejs_22;
+  stdenv = pkgs.stdenv;
 in {
-  packages = with pkgs;
+  packages =
     [
-      zsh
-      mob
-      alejandra
-      openssl
-      cargo-binstall
-      cargo-workspaces
-      cargo-nextest
-      playwright-driver.browsers
-      dbmate
+      pkgs.alejandra
+      pkgs.at-spi2-atk
+      pkgs.atkmm
+      pkgs.cairo
+      fPkgs.cargo
+      pkgs.dbmate
+      pkgs.gdk-pixbuf
+      pkgs.glib
+      pkgs.gobject-introspection
+      pkgs.gtk3
+      pkgs.harfbuzz
+      pkgs.librsvg
+      pkgs.libsoup_3
+      pkgs.libz
+      pkgs.mob
+      pkgs.nodejs
+      pkgs.openssl
+      pkgs.pango
+      pkgs.pkg-config
+      pkgs.playwright-driver.browsers
+      pkgs.webkitgtk_4_1
+      pkgs.zsh
     ]
     ++ lib.optionals stdenv.isLinux [
-      libnotify
-      inotify-tools
+      pkgs.libnotify
+      pkgs.inotify-tools
     ]
     ++ lib.optionals stdenv.isDarwin [
-      terminal-notifier
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
+      pkgs.terminal-notifier
+      pkgs.darwin.apple_sdk.frameworks.CoreFoundation
+      pkgs.darwin.apple_sdk.frameworks.CoreServices
     ];
 
   languages = {
@@ -53,45 +67,11 @@ in {
   env.PLAYWRIGHT_BROWSERS_PATH = pkgs.playwright-driver.browsers;
 
   tasks = {
-    "zsh:install_repl" = {
+    "zsh:install_cargo_programs" = {
       exec = ''
         export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-        ${cargo}/bin/cargo binstall -y --force evcxr@0.18.0
+        ${cargo}/bin/cargo install evcxr@0.18.0 bacon@3.6.0 dioxus-cli@0.6.1 cargo-workspaces@0.3.6 cargo-nextest@0.9.82 wasm-bindgen-cli@0.2.99
       '';
-      status = "evcxr -V";
-
-      before = ["devenv:enterShell"];
-    };
-    "zsh:install_bacon" = {
-      exec = ''
-        export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-        ${cargo}/bin/cargo binstall -y --force bacon@3.6.0
-      '';
-      status = "bacon --version";
-      before = ["devenv:enterShell"];
-    };
-    "zsh:install_dioxus-cli" = {
-      exec = ''
-        export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-        ${cargo}/bin/cargo binstall -y --force dioxus-cli@0.6.1
-      '';
-      status = "dx --version";
-      before = ["devenv:enterShell"];
-    };
-    "zsh:install_cargo-workspaces" = {
-      exec = ''
-        export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-        ${cargo}/bin/cargo binstall -y --force cargo-workspaces@0.3.6
-      '';
-      status = "dx --version";
-      before = ["devenv:enterShell"];
-    };
-    "zsh:install_cargo-nextest" = {
-      exec = ''
-        export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-        ${cargo}/bin/cargo binstall -y --force cargo-nextest@0.9.82
-      '';
-      status = "dx --version";
       before = ["devenv:enterShell"];
     };
   };
