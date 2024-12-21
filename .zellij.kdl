@@ -1,0 +1,30 @@
+layout {
+	default_tab_template split_direction="horizontal" {
+		children
+		pane size=1 borderless=true {
+			plugin location="compact-bar"
+		}
+	}
+
+	tab name="1 code" focus=true {
+		pane split_direction="vertical" {
+			pane name="editor" size="80%" focus=true command="nvim" borderless=true
+            pane split_direction="horizontal" size="20%" {
+                pane name="cargo test" size="50%" command="bacon" {
+                    args "nextest"
+                }
+                pane name="e2e test" size="50%" command="bacon" {
+                    args "e2etest"
+                }
+            }
+		}
+	}
+
+	tab name="2 servers" {
+		pane split_direction="vertical" {
+			pane name="services" command="devenv" {
+				args "up"
+			}
+		}
+	}
+}

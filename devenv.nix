@@ -34,6 +34,8 @@ in {
       pkgs.openssl
       pkgs.pango
       pkgs.pkg-config
+      pkgs.playwright-test
+      pkgs.playwright-driver
       pkgs.playwright-driver.browsers
       pkgs.webkitgtk_4_1
       pkgs.zsh
@@ -64,8 +66,6 @@ in {
     };
   };
 
-  env.PLAYWRIGHT_BROWSERS_PATH = pkgs.playwright-driver.browsers;
-
   tasks = {
     "zsh:install_cargo_programs" = {
       exec = ''
@@ -73,6 +73,12 @@ in {
         ${cargo}/bin/cargo install evcxr@0.18.0 bacon@3.6.0 dioxus-cli@0.6.1 cargo-workspaces@0.3.6 cargo-nextest@0.9.82 wasm-bindgen-cli@0.2.99
       '';
       before = ["devenv:enterShell"];
+    };
+  };
+
+  processes = {
+    app = {
+      exec = "${cargo}/bin/cargo leptos serve";
     };
   };
 
@@ -94,9 +100,6 @@ in {
         config = ''
           level-up.jwilger.slipstreamconsulting.net {
             reverse_proxy localhost:3000
-          }
-          level-up.jwilger.slipstreamconsulting.net:3003 {
-            reverse_proxy localhost:3001
           }
         '';
       };

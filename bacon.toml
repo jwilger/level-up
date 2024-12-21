@@ -8,6 +8,13 @@
 default_job = "nextest"
 env.CARGO_TERM_COLOR = "always"
 
+[jobs.e2etest]
+command = ["playwright", "test", "-c", "end2end/playwright.config.ts"]
+need_stdout = true
+background = false
+default_watch = true
+watch = ["end2end/tests"]
+
 [exports.locations]
 auto = true
 path = ".bacon-locations"
