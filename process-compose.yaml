@@ -1,0 +1,16 @@
+version: "0.5"
+
+processes:
+  postgres:
+    command: docker run --name level_up_db -e POSTGRES_USER=level_up -e POSTGRES_PASSWORD=level_up -e POSTGRES_DB=level_up -v ./.pg_data:/var/lib/postgresql/data --rm -p 5432:5432 postgres:17
+    availability:
+      restart: always
+    readiness_probe:
+      exec: 
+        command: "PGPASSWORD=level_up psql -U level_up -c \"SELECT date_trunc('second', current_timestamp - pg_postmaster_start_time()) as updatime;\" | awk 'FNR == 3'"
+
+  app:
+    command: gleam run -m lustre/dev start
+    depends_on:
+      postgres:
+        condition: process_healthy
